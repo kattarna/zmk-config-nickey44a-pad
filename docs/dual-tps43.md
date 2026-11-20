@@ -5,12 +5,14 @@
 | 信号・設定 | 左手のTPS43 | 右手のTPS43 |
 |---|---|---|
 | SDA | P0.09 | P0.09 |
-| SCL | P0.10 | P0.10 |
-| RDY | P1.10 | P1.10 |
-| NRST | P0.16 | P0.16 |
+| SCL | P1.01 | P1.01 |
+| RDY | P0.15 | P0.15 |
+| NRST | P0.19 | P0.19 |
 | I2Cアドレス | `0x74` | `0x74` |
 
 各MCUに独立したI2Cバスがあるため、アドレスは同じでよい。
+ピン配置は[`nickey44a_l.overlay`](../boards/shields/nickey44a/nickey44a_l.overlay)と
+[`nickey44a_r.overlay`](../boards/shields/nickey44a/nickey44a_r.overlay)の定義に合わせている。
 westのrevision、ZMK本体、Azoteqドライバーは変更しない。
 
 ## ジェスチャの割り当て
