@@ -98,20 +98,20 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '?'
+  - '!'
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '&'
   - '%'
-  - {t: ▽, type: trans}
+  - +
   - {t: ▽, type: trans}
   - '@'
   - '#'
   - $
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '!'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - X
+  - C
+  - V
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -123,8 +123,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '&'
-  - {t: ▽, type: trans}
+  - SPACE
+  - LANG1
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -133,8 +133,8 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - LGUI
+  - LANG2
   '3':
   - BT CLR
   - {t: BT, h: '0'}
