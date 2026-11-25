@@ -58,10 +58,10 @@
 
         layer_2 {
             bindings = <
-&trans  &trans  &trans     &trans      &trans  &trans                    &kp QUESTION   &trans  &trans  &trans  &kp PERCENT  &trans
-&trans  &kp AT  &kp HASH   &kp DOLLAR  &trans  &trans                    &kp EXCL       &trans  &trans  &trans  &trans       &trans
-&trans  &trans  &kp ASTRK  &kp CARET   &trans  &trans  &trans    &trans  &kp AMPERSAND  &trans  &trans  &trans  &trans       &trans
-                                       &trans  &trans  &trans    &trans  &trans         &trans
+&trans  &trans  &trans     &trans      &trans  &trans                    &kp QUESTION   &kp EXCL   &trans  &kp AMPERSAND  &kp PERCENT  &kp PLUS
+&trans  &kp AT  &kp HASH   &kp DOLLAR  &trans  &trans                    &kp X          &kp C      &kp V   &trans         &trans       &trans
+&trans  &trans  &kp ASTRK  &kp CARET   &trans  &trans  &trans    &trans  &kp SPACE      &kp LANG1  &trans  &trans         &trans       &trans
+                                       &trans  &trans  &trans    &trans  &kp LGUI       &kp LANG2
             >;
         };
 
