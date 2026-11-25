@@ -98,20 +98,20 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - '?'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - '&EXCL'
+  - '&AMPERSAND'
   - {t: ▽, type: trans}
   - '%'
-  - {t: ▽, type: trans}
+  - +
   - {t: ▽, type: trans}
   - '@'
   - '#'
   - $
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '!'
-  - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - X
+  - C
+  - V
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -123,7 +123,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - '&'
+  - SPACE
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
@@ -133,7 +133,7 @@ layers:
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
   - {t: ▽, type: trans}
-  - {t: ▽, type: trans}
+  - RGUI
   - {t: ▽, type: trans}
   '3':
   - BT CLR
