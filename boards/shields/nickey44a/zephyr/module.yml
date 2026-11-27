@@ -1,4 +1,0 @@
-name: f13-gesture-gate
-build:
-  cmake: .
-  kconfig: Kconfig
