@@ -1,1 +1,7 @@
-
+description: Gate input events based on F13 hold state
+compatible: "zmk,input-processor-f13-gate"
+include: ip_zero_param.yaml
+properties:
+  mode:
+    type: int
+    required: true
