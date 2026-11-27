@@ -1,0 +1,19 @@
+description: 4-way swipe and tap layer switcher when F13 is held
+compatible: "zmk,input-processor-f13-layer-gesture"
+include: ip_zero_param.yaml
+properties:
+  hwheel-code:
+    type: int
+    required: true
+  wheel-code:
+    type: int
+    required: true
+  touch-code:
+    type: int
+    required: true
+  threshold:
+    type: int
+    default: 8
+  axis-ratio:
+    type: int
+    default: 2
