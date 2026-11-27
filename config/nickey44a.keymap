@@ -33,6 +33,31 @@
             #binding-cells = <2>;
             tapping-term-ms = <200>;
         };
+
+        /* ▼ 追加：F13キーに割り当てるビヘイビア */
+        f13_hold: f13_hold {
+            compatible = "zmk,behavior-f13-hold";
+            #binding-cells = <0>;
+        };
+
+        /* ▼ 追加：1本指タップで現在のレイヤーから1つ上（0〜9循環）へ移動 */
+        f13_layer_up: f13_layer_up {
+            compatible = "zmk,behavior-layer-up";
+            #binding-cells = <0>;
+        };
+    };
+
+    /* ▼ 追加：F13押下状態を判定するトラックパッド用ゲート */
+    f13_gate_normal: f13_gate_normal {
+        compatible = "zmk,input-processor-f13-gate";
+        #input-processor-cells = <0>;
+        mode = <0>;
+    };
+
+    f13_gate_active: f13_gate_active {
+        compatible = "zmk,input-processor-f13-gate";
+        #input-processor-cells = <0>;
+        mode = <1>;
     };
 
     keymap {
@@ -40,10 +65,10 @@
 
         default_layer {
             bindings = <
-&kp TAB    &kp Q  &kp W  &kp E  &kp R  &kp T                         &kp Y    &kp U     &kp I      &kp O    &kp P     &kp SQT
-&kp LCTRL  &kp A  &kp S  &kp D  &kp F  &kp G                         &kp H    &kp J     &kp K      &kp L    &kp SEMI  &kp MINUS
-&kp LSHFT  &kp Z  &kp X  &kp C  &kp V  &kp B  &trans       &trans    &kp N    &kp M     &kp COMMA  &kp DOT  &kp FSLH  &kp EQUAL
-                                &mo 2  &mo 1  &kp SPACE    &kp BSPC  &kp RET  &kp RALT
+&kp TAB    &kp Q  &kp W  &kp E  &kp R     &kp T                          &kp Y    &kp U     &kp I      &kp O    &kp P     &kp SQT
+&kp LCTRL  &kp A  &kp S  &kp D  &kp F     &kp G                          &kp H    &kp J     &kp K      &kp L    &kp SEMI  &kp MINUS
+&kp LSHFT  &kp Z  &kp X  &kp C  &kp V     &kp B  &trans       &trans     &kp N    &kp M     &kp COMMA  &kp DOT  &kp FSLH  &kp EQUAL
+                                &kp BSPC  &mo 1  &kp SPACE    &f13_hold  &kp RET  &kp RALT
             >;
         };
 
@@ -52,25 +77,79 @@
 &kp ESCAPE    &kp NUMBER_1  &kp NUMBER_2  &kp NUMBER_3  &kp NUMBER_4  &kp NUMBER_5                        &kp NUMBER_6      &kp N7                &kp N8                 &kp N9             &kp N0         &kp GRAVE
 &kp LEFT_WIN  &kp F1        &kp F2        &kp F3        &kp F4        &kp F5                              &kp LEFT          &kp DOWN              &kp UP                 &kp RIGHT          &trans         &kp TILDE
 &trans        &kp F6        &kp F7        &kp F8        &kp F9        &kp F10       &trans    &trans      &kp LEFT_BRACKET  &kp LEFT_PARENTHESIS  &kp RIGHT_PARENTHESIS  &kp RIGHT_BRACKET  &kp BACKSLASH  &trans
-                                                        &mo 3         &trans        &trans    &kp DELETE  &trans            &trans
+                                                        &mo 3         &trans        &trans    &f13_hold   &trans            &trans
             >;
         };
 
         layer_2 {
             bindings = <
-&trans  &trans  &trans     &trans      &trans  &trans                    &kp QUESTION   &kp EXCL   &trans  &kp AMPERSAND  &kp PERCENT  &kp LS(SEMI)
-&trans  &kp AT  &kp HASH   &kp DOLLAR  &trans  &trans                    &kp X          &kp C      &kp V   &trans         &trans       &trans
-&trans  &trans  &kp ASTRK  &kp CARET   &trans  &trans  &trans    &trans  &kp SPACE      &kp LANG1  &trans  &trans         &trans       &trans
-                                       &trans  &trans  &trans    &trans  &kp LGUI       &kp LANG2
+&trans  &trans  &trans     &trans      &trans  &trans                       &kp QUESTION   &kp EXCL   &trans  &kp AMPERSAND  &kp PERCENT  &kp LS(SEMI)
+&trans  &kp AT  &kp HASH   &kp DOLLAR  &trans  &trans                       &kp X          &kp C      &kp V   &trans         &trans       &trans
+&trans  &trans  &kp ASTRK  &kp CARET   &trans  &trans  &trans    &trans     &kp SPACE      &kp LANG1  &trans  &trans         &trans       &trans
+                                       &trans  &trans  &trans    &f13_hold  &kp LGUI       &kp LANG2
             >;
         };
 
         layer_3 {
             bindings = <
-&bt BT_CLR      &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                    &trans  &trans  &trans  &trans  &trans  &trans
-&bt BT_CLR_ALL  &trans        &trans        &trans        &trans        &trans                          &trans  &trans  &trans  &trans  &trans  &trans
-&studio_unlock  &trans        &trans        &trans        &trans        &trans        &trans    &trans  &trans  &trans  &trans  &trans  &trans  &trans
-                                                          &trans        &trans        &trans    &trans  &trans  &trans
+&bt BT_CLR      &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                       &trans  &trans  &trans  &trans  &trans  &trans
+&bt BT_CLR_ALL  &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&studio_unlock  &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                          &trans        &trans        &trans    &f13_hold  &trans  &trans
+            >;
+        };
+
+        layer_4 {
+            bindings = <
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+            >;
+        };
+
+        layer_5 {
+            bindings = <
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+            >;
+        };
+
+        layer_6 {
+            bindings = <
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+            >;
+        };
+
+        layer_7 {
+            bindings = <
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+            >;
+        };
+
+        layer_8 {
+            bindings = <
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+            >;
+        };
+
+        layer_9 {
+            bindings = <
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
             >;
         };
     };
