@@ -10,6 +10,7 @@
 #include <zmk/hid.h>
 #include <zmk/endpoints.h>
 #include <dt-bindings/zmk/keys.h>
+#include <dt-bindings/zmk/hid_usage_pages.h>
 
 static bool f13_is_pressed = false;
 
@@ -26,7 +27,7 @@ static int f13_hold_pressed(struct zmk_behavior_binding *binding,
                             struct zmk_behavior_binding_event event) {
     f13_is_pressed = true;
     zmk_hid_keyboard_press(HID_USAGE_KEY_KEYBOARD_F13);
-    zmk_endpoints_send_report(HID_USAGE_PAGE_KEYBOARD);
+    zmk_endpoints_send_report(HID_USAGE_KEY);
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
@@ -34,7 +35,7 @@ static int f13_hold_released(struct zmk_behavior_binding *binding,
                              struct zmk_behavior_binding_event event) {
     f13_is_pressed = false;
     zmk_hid_keyboard_release(HID_USAGE_KEY_KEYBOARD_F13);
-    zmk_endpoints_send_report(HID_USAGE_PAGE_KEYBOARD);
+    zmk_endpoints_send_report(HID_USAGE_KEY);
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
