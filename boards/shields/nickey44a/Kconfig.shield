@@ -3,3 +3,7 @@ config SHIELD_NICKEY44A_R
 
 config SHIELD_NICKEY44A_L
     def_bool $(shields_list_contains,nickey44a_l)
+
+config ZMK_BEHAVIOR_F13_GESTURE_GATE
+    bool "Enable F13 hold gesture gate and layer up behaviors"
+    default y
