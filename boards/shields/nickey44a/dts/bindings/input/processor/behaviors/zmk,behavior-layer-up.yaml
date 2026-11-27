@@ -1,0 +1,3 @@
+description: Increment active base layer up to layer 9
+compatible: "zmk,behavior-layer-up"
+include: zero_param.yaml
