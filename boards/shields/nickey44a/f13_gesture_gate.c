@@ -1,1 +1,100 @@
+#define DT_DRV_COMPAT zmk_behavior_f13_hold
 
+#include <zephyr/device.h>
+#include <zephyr/kernel.h>
+#include <drivers/behavior.h>
+#include <drivers/input_processor.h>
+#include <zmk/keymap.h>
+#include <zmk/hid.h>
+#include <zmk/endpoints.h>
+#include <dt-bindings/zmk/keys.h>
+
+static bool f13_is_pressed = false;
+
+/* =========================================================
+ * 1. &f13_hold : F13キー押下状態の管理とF13送信
+ * ========================================================= */
+static int f13_hold_pressed(struct zmk_behavior_binding *binding,
+                            struct zmk_behavior_binding_event event) {
+    f13_is_pressed = true;
+    zmk_hid_keyboard_press(HID_USAGE_KEY_KEYBOARD_F13);
+    zmk_endpoints_send_report(HID_USAGE_PAGE_KEYBOARD);
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
+static int f13_hold_released(struct zmk_behavior_binding *binding,
+                             struct zmk_behavior_binding_event event) {
+    f13_is_pressed = false;
+    zmk_hid_keyboard_release(HID_USAGE_KEY_KEYBOARD_F13);
+    zmk_endpoints_send_report(HID_USAGE_PAGE_KEYBOARD);
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
+static const struct behavior_driver_api f13_hold_driver_api = {
+    .binding_pressed = f13_hold_pressed,
+    .binding_released = f13_hold_released,
+};
+
+#define F13_HOLD_INST(n) \
+    BEHAVIOR_DT_INST_DEFINE(n, NULL, NULL, NULL, NULL, POST_KERNEL, \
+                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &f13_hold_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(F13_HOLD_INST)
+
+/* =========================================================
+ * 2. &f13_layer_up : 現在のレイヤーから1つ上へ移動（0〜9循環）
+ * ========================================================= */
+#undef DT_DRV_COMPAT
+#define DT_DRV_COMPAT zmk_behavior_layer_up
+
+static int layer_up_pressed(struct zmk_behavior_binding *binding,
+                            struct zmk_behavior_binding_event event) {
+    uint8_t current = zmk_keymap_highest_layer_active();
+    uint8_t next = (current >= 9) ? 0 : (current + 1);
+    zmk_keymap_layer_to(next);
+    return ZMK_BEHAVIOR_OPAQUE;
+}
+
+static const struct behavior_driver_api layer_up_driver_api = {
+    .binding_pressed = layer_up_pressed,
+};
+
+#define LAYER_UP_INST(n) \
+    BEHAVIOR_DT_INST_DEFINE(n, NULL, NULL, NULL, NULL, POST_KERNEL, \
+                            CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &layer_up_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(LAYER_UP_INST)
+
+/* =========================================================
+ * 3. &f13_gate_normal / &f13_gate_active : トラックパッド分岐ゲート
+ * ========================================================= */
+#undef DT_DRV_COMPAT
+#define DT_DRV_COMPAT zmk_input_processor_f13_gate
+
+struct f13_gate_config {
+    uint8_t mode; /* 0: F13非押下時のみ通過, 1: F13押下時のみ通過 */
+};
+
+static int f13_gate_handle_event(const struct device *dev, struct input_event *event,
+                                 uint32_t param1, uint32_t param2,
+                                 struct zmk_input_processor_state *state) {
+    const struct f13_gate_config *cfg = dev->config;
+    if (cfg->mode == 0) {
+        return f13_is_pressed ? ZMK_INPUT_PROC_STOP : ZMK_INPUT_PROC_CONTINUE;
+    } else {
+        return f13_is_pressed ? ZMK_INPUT_PROC_CONTINUE : ZMK_INPUT_PROC_STOP;
+    }
+}
+
+static const struct zmk_input_processor_driver_api f13_gate_driver_api = {
+    .handle_event = f13_gate_handle_event,
+};
+
+#define F13_GATE_INST(n) \
+    static const struct f13_gate_config f13_gate_config_##n = { \
+        .mode = DT_INST_PROP(n, mode), \
+    }; \
+    DEVICE_DT_INST_DEFINE(n, NULL, NULL, NULL, &f13_gate_config_##n, POST_KERNEL, \
+                          CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &f13_gate_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(F13_GATE_INST)
