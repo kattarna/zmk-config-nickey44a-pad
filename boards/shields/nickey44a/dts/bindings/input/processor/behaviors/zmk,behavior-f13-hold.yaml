@@ -1,0 +1,3 @@
+description: F13 hold key behavior that sets gesture gate flag
+compatible: "zmk,behavior-f13-hold"
+include: zero_param.yaml
