@@ -45,11 +45,6 @@
         };
     };
 
-    left_tps43_listener: left_tps43_listener {
-        compatible = "zmk,input-listener";
-        device = <&left_tps43_split>;
-        input-processors = <&left_tps43_tab_swipe>;
-    };
 
     left_tps43_tab_swipe: left_tps43_tab_swipe {
         compatible = "zmk,input-processor-touch-swipe";
@@ -62,6 +57,49 @@
         /* Measured left pad: physical right swipe produces negative DIAL. */
         left-keycode = <LC(TAB)>;
         right-keycode = <LC(LS(TAB))>;
+    };
+
+/* ▼ F13 押下中：4方向スワイプによるレイヤー切替え */
+    f13_left_pad_swipe: f13_left_pad_swipe {
+        compatible = "zmk,input-processor-touch-swipe";
+        #input-processor-cells = <0>;
+        hwheel-code = <INPUT_REL_DIAL>;
+        wheel-code = <INPUT_REL_HWHEEL>;
+        touch-code = <INPUT_BTN_TOUCH>;
+        threshold = <8>;
+        axis-ratio = <2>;
+        /* 物理右スワイプ＝負のDIAL（left-keycode）の仕様に合わせた割り当て */
+        up-keycode    = <&to 3>;   // 1：上スワイプ → レイヤー3へ
+        left-keycode  = <&to 4>;   // 2：物理右スワイプ → レイヤー4へ
+        down-keycode  = <&to 5>;   // 3：下スワイプ → レイヤー5へ
+        right-keycode = <&to 6>;   // 4：物理左スワイプ → レイヤー6へ
+    };
+
+    /* ▼ F13 押下中：2本指タップ（BTN_2）→ レイヤー0へ */
+    f13_two_tap_to_l0: f13_two_tap_to_l0 {
+        compatible = "zmk,input-processor-behaviors";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_KEY>;
+        codes = <INPUT_BTN_2>;
+        bindings = <&to 0>;
+    };
+
+    /* ▼ F13 押下中：1本指タップ（BTN_0）→ 現在のレイヤーから1つ上へ */
+    f13_one_tap_layer_up: f13_one_tap_layer_up {
+        compatible = "zmk,input-processor-behaviors";
+        #input-processor-cells = <0>;
+        type = <INPUT_EV_KEY>;
+        codes = <INPUT_BTN_0>;
+        bindings = <&f13_layer_up>;
+    };
+
+    /* 左トラックパッドのリスナー（レイヤー分岐なしで F13 押下フラグを判定） */
+    left_tps43_listener: left_tps43_listener {
+        compatible = "zmk,input-listener";
+        device = <&left_tps43_split>;
+        /* F13押下中は f13_* プロセッサのみ通し、非押下時は left_tps43_tab_swipe のみ通すゲート */
+        input-processors = <&f13_gate_normal &left_tps43_tab_swipe>,
+                           <&f13_gate_active &f13_left_pad_swipe &f13_two_tap_to_l0 &f13_one_tap_layer_up>;
     };
 
     tps43_orientation: tps43_orientation {
