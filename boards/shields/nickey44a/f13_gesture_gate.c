@@ -12,12 +12,16 @@
 #include <dt-bindings/zmk/keys.h>
 #include <dt-bindings/zmk/hid_usage_pages.h>
 
+#define IS_CENTRAL (!IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
+
 static bool f13_is_pressed = false;
 
 static void trigger_layer_up(void) {
+#if IS_CENTRAL
     uint8_t current = zmk_keymap_highest_layer_active();
     uint8_t next = (current >= 9) ? 0 : (current + 1);
     zmk_keymap_layer_to(next);
+#endif
 }
 
 /* =========================================================
@@ -25,17 +29,21 @@ static void trigger_layer_up(void) {
  * ========================================================= */
 static int f13_hold_pressed(struct zmk_behavior_binding *binding,
                             struct zmk_behavior_binding_event event) {
+#if IS_CENTRAL
     f13_is_pressed = true;
     zmk_hid_keyboard_press(HID_USAGE_KEY_KEYBOARD_F13);
     zmk_endpoints_send_report(HID_USAGE_KEY);
+#endif
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
 static int f13_hold_released(struct zmk_behavior_binding *binding,
                              struct zmk_behavior_binding_event event) {
+#if IS_CENTRAL
     f13_is_pressed = false;
     zmk_hid_keyboard_release(HID_USAGE_KEY_KEYBOARD_F13);
     zmk_endpoints_send_report(HID_USAGE_KEY);
+#endif
     return ZMK_BEHAVIOR_OPAQUE;
 }
 
@@ -130,6 +138,7 @@ struct f13_gesture_data {
 static int f13_gesture_handle_event(const struct device *dev, struct input_event *event,
                                     uint32_t param1, uint32_t param2,
                                     struct zmk_input_processor_state *state) {
+#if IS_CENTRAL
     const struct f13_gesture_config *cfg = dev->config;
     struct f13_gesture_data *data = dev->data;
 
@@ -192,7 +201,7 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
             }
         }
     }
-
+#endif
     /* F13押下中はホストへ余計なスクロール・ポインタ移動を送らない */
     return ZMK_INPUT_PROC_STOP;
 }
