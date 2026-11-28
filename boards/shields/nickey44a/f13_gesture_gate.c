@@ -1,20 +1,3 @@
-#define F13_GESTURE_INST(n) \
-    static const struct f13_gesture_config f13_gesture_config_##n = { \
-        .hwheel_code = DT_INST_PROP(n, hwheel_code), \
-        .wheel_code = DT_INST_PROP(n, wheel_code), \
-        .touch_code = DT_INST_PROP(n, touch_code), \
-        .threshold = DT_INST_PROP(n, threshold), \
-        .axis_ratio = DT_INST_PROP(n, axis_ratio), \
-    }; \
-    static struct f13_gesture_data f13_gesture_data_##n; \
-    DEVICE_DT_INST_DEFINE(n, NULL, NULL, &f13_gesture_data_##n, &f13_gesture_config_##n, \
-                          POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &f13_gesture_driver_api);
-
-DT_INST_FOREACH_STATUS_OKAY(F13_GESTURE_INST)
-コピペ用：f13_gesture_gate.c 全文（ビルドエラー修正・スワイプリセット順序修正済み）
-念のため、ファイル全体をそのまま上書きできる完全版も記載します。
-
-C
 #define DT_DRV_COMPAT zmk_behavior_f13_hold
 
 #include <zephyr/device.h>
