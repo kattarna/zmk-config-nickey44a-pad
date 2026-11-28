@@ -85,71 +85,71 @@
             bindings = <
 &trans  &trans  &trans     &trans      &trans  &trans                       &kp QUESTION   &kp EXCL   &trans  &kp AMPERSAND  &kp PERCENT  &kp LS(SEMI)
 &trans  &kp AT  &kp HASH   &kp DOLLAR  &trans  &trans                       &kp X          &kp C      &kp V   &trans         &trans       &trans
-&trans  &trans  &kp ASTRK  &kp CARET   &trans  &trans  &trans    &trans     &kp SPACE      &kp LANG1  &trans  &trans         &trans       &trans
+&trans  &trans  &kp ASTRK  &kp CARET   &trans  &trans  &trans    &trans     &kp NUMBER_2   &kp LANG1  &trans  &trans         &trans       &trans
                                        &trans  &trans  &trans    &f13_hold  &kp LGUI       &kp LANG2
             >;
         };
 
         layer_3 {
             bindings = <
-&bt BT_CLR      &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                       &trans  &trans  &trans  &trans  &trans  &trans
-&bt BT_CLR_ALL  &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&studio_unlock  &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                          &trans        &trans        &trans    &f13_hold  &trans  &trans
+&bt BT_CLR      &bt BT_SEL 0  &bt BT_SEL 1  &bt BT_SEL 2  &bt BT_SEL 3  &bt BT_SEL 4                       &trans  　　　　&trans  &trans  &trans  &trans  &trans
+&bt BT_CLR_ALL  &trans        &trans        &trans        &trans        &trans                             &trans  　　　　&trans  &trans  &trans  &trans  &trans
+&studio_unlock  &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_3  &trans  &trans  &trans  &trans  &trans
+                                                          &trans        &trans        &trans    &f13_hold  &trans 　　　　 &trans
             >;
         };
 
         layer_4 {
             bindings = <
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_4  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans        &trans
             >;
         };
 
         layer_5 {
             bindings = <
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_5  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans        &trans
             >;
         };
 
         layer_6 {
             bindings = <
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_6  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans        &trans
             >;
         };
 
         layer_7 {
             bindings = <
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_7  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans        &trans
             >;
         };
 
         layer_8 {
             bindings = <
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_8  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans        &trans
             >;
         };
 
         layer_9 {
             bindings = <
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans                             &trans  &trans  &trans  &trans  &trans  &trans
-&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &trans  &trans  &trans  &trans  &trans  &trans
-                                                        &trans        &trans        &trans    &f13_hold  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans                             &trans        &trans  &trans  &trans  &trans  &trans
+&trans        &trans        &trans        &trans        &trans        &trans        &trans    &trans     &kp NUMBER_9  &trans  &trans  &trans  &trans  &trans
+                                                        &trans        &trans        &trans    &f13_hold  &trans        &trans
             >;
         };
     };
