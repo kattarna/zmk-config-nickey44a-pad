@@ -155,6 +155,11 @@ struct f13_gesture_data {
 static int f13_gesture_handle_event(const struct device *dev, struct input_event *event,
                                     uint32_t param1, uint32_t param2,
                                     struct zmk_input_processor_state *state) {
+    /* F13が押されていなければ、後続の &left_tps43_tab_swipe へそのまま流す */
+    if (!f13_is_pressed) {
+        return ZMK_INPUT_PROC_CONTINUE;
+    }
+
 #if IS_CENTRAL
     const struct f13_gesture_config *cfg = dev->config;
     struct f13_gesture_data *data = dev->data;
