@@ -65,7 +65,7 @@
         hwheel-code = <INPUT_REL_DIAL>;
         wheel-code = <INPUT_REL_HWHEEL>;
         touch-code = <INPUT_BTN_TOUCH>;
-        threshold = <8>;
+        threshold = <3>;
         axis-ratio = <2>;
     };
 
@@ -73,9 +73,8 @@
     left_tps43_listener: left_tps43_listener {
         compatible = "zmk,input-listener";
         device = <&left_tps43_split>;
-        /* F13非押下時はタブ切替、F13押下時はレイヤー操作ジェスチャーのみを実行 */
-        input-processors = <&f13_gate_normal &left_tps43_tab_swipe>,
-                           <&f13_gate_active &f13_layer_gesture>;
+        /* 先頭でF13押下中のレイヤー操作を判定し、F13非押下時のみ後ろのタブ切替へ流す */
+        input-processors = <&f13_layer_gesture &left_tps43_tab_swipe>;
     };
 
     tps43_orientation: tps43_orientation {
