@@ -62,10 +62,8 @@
             compatible = "zmk,input-split";
             reg = <0>;
             device = <&left_tps43>;
-            /* Keep swipe motion distinct from the mapped horizontal scroll. */
+           /* 軸コードは変更せず、標準の WHEEL / HWHEEL のまま右側へ転送する */
             input-processors = <&zip_xy_scaler 0 1>,
-                               <&left_swipe_axis_mapper>,
-                               <&left_wheel_to_hwheel>,
                                <&left_middle_click_mapper>;
         };
     };
