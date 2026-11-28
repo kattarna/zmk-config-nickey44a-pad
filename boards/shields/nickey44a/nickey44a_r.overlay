@@ -48,8 +48,8 @@
     left_tps43_tab_swipe: left_tps43_tab_swipe {
         compatible = "zmk,input-processor-touch-swipe";
         #input-processor-cells = <0>;
-        hwheel-code = <INPUT_REL_DIAL>;
-        wheel-code = <INPUT_REL_HWHEEL>;
+        hwheel-code = <INPUT_REL_HWHEEL>;
+        wheel-code = <INPUT_REL_WHEEL>;
         touch-code = <INPUT_BTN_TOUCH>;
         threshold = <8>;
         axis-ratio = <2>;
@@ -65,8 +65,8 @@
         hwheel-code = <INPUT_REL_DIAL>;
         wheel-code = <INPUT_REL_HWHEEL>;
         touch-code = <INPUT_BTN_TOUCH>;
-        threshold = <3>;
-        axis-ratio = <2>;
+        threshold = <2>;
+        axis-ratio = <1>;
     };
 
     /* 左トラックパッドのリスナー */
