@@ -34,20 +34,17 @@
             tapping-term-ms = <200>;
         };
 
-        /* ▼ 追加：F13キーに割り当てるビヘイビア */
         f13_hold: f13_hold {
             compatible = "zmk,behavior-f13-hold";
             #binding-cells = <0>;
         };
 
-        /* ▼ 追加：1本指タップで現在のレイヤーから1つ上（0〜9循環）へ移動 */
         f13_layer_up: f13_layer_up {
             compatible = "zmk,behavior-layer-up";
             #binding-cells = <0>;
         };
     };
 
-    /* ▼ 追加：F13押下状態を判定するトラックパッド用ゲート */
     f13_gate_normal: f13_gate_normal {
         compatible = "zmk,input-processor-f13-gate";
         #input-processor-cells = <0>;
