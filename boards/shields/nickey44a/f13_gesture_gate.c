@@ -155,7 +155,6 @@ struct f13_gesture_data {
 static int f13_gesture_handle_event(const struct device *dev, struct input_event *event,
                                     uint32_t param1, uint32_t param2,
                                     struct zmk_input_processor_state *state) {
-    /* F13が押されていなければ、後続の &left_tps43_tab_swipe へそのまま流す */
     if (!f13_is_pressed) {
         return ZMK_INPUT_PROC_CONTINUE;
     }
@@ -163,12 +162,15 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
 #if IS_CENTRAL
     const struct f13_gesture_config *cfg = dev->config;
     struct f13_gesture_data *data = dev->data;
+    int64_t now = k_uptime_get();
 
-    if (!f13_swipe_triggered && (k_uptime_get() - data->last_event_ms > 250)) {
+    /* 800ms以上操作が途切れた場合のみ累積値をリセット（ゆっくりスワイプに対応） */
+    if (now - data->last_event_ms > 800) {
+        f13_swipe_triggered = false;
         data->acc_x = 0;
         data->acc_y = 0;
     }
-    data->last_event_ms = k_uptime_get();
+    data->last_event_ms = now;
 
     if (event->type == INPUT_EV_KEY) {
         if (event->code == cfg->touch_code) {
@@ -191,9 +193,10 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
     }
 
     if (event->type == INPUT_EV_REL && !f13_swipe_triggered) {
-        if (event->code == cfg->hwheel_code) {
+        /* どのRELコードで飛んできても確実にX/Yへ振り分ける */
+        if (event->code == cfg->hwheel_code || event->code == INPUT_REL_X) {
             data->acc_x += event->value;
-        } else if (event->code == cfg->wheel_code) {
+        } else if (event->code == cfg->wheel_code || event->code == INPUT_REL_WHEEL || event->code == INPUT_REL_Y) {
             data->acc_y += event->value;
         } else {
             return ZMK_INPUT_PROC_STOP;
@@ -202,21 +205,22 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
         int32_t abs_x = abs(data->acc_x);
         int32_t abs_y = abs(data->acc_y);
 
-        if (abs_x >= cfg->threshold && abs_x >= abs_y * cfg->axis_ratio) {
+        /* 先に threshold に到達した軸（かつ相手軸より大きい場合）で即座にレイヤー切替 */
+        if (abs_x >= cfg->threshold && abs_x > abs_y) {
             f13_swipe_triggered = true;
             if (data->acc_x < 0) {
-                set_layer_exclusive(4);
+                set_layer_exclusive(4); /* 右スワイプ -> レイヤー4 */
             } else {
-                set_layer_exclusive(6);
+                set_layer_exclusive(6); /* 左スワイプ -> レイヤー6 */
             }
             data->acc_x = 0;
             data->acc_y = 0;
-        } else if (abs_y >= cfg->threshold && abs_y >= abs_x * cfg->axis_ratio) {
+        } else if (abs_y >= cfg->threshold && abs_y > abs_x) {
             f13_swipe_triggered = true;
             if (data->acc_y > 0) {
-                set_layer_exclusive(3);
+                set_layer_exclusive(3); /* 上スワイプ -> レイヤー3 */
             } else {
-                set_layer_exclusive(5);
+                set_layer_exclusive(5); /* 下スワイプ -> レイヤー5 */
             }
             data->acc_x = 0;
             data->acc_y = 0;
