@@ -63,7 +63,7 @@
         compatible = "zmk,input-processor-f13-layer-gesture";
         #input-processor-cells = <0>;
         hwheel-code = <INPUT_REL_HWHEEL>;
-        wheel-code = <INPUT_REL_HWHEEL>;
+        wheel-code = <INPUT_REL_WHEEL>;
         touch-code = <INPUT_BTN_TOUCH>;
         threshold = <2>;
         axis-ratio = <1>;
