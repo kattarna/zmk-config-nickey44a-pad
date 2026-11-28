@@ -1,3 +1,20 @@
+#define F13_GESTURE_INST(n) \
+    static const struct f13_gesture_config f13_gesture_config_##n = { \
+        .hwheel_code = DT_INST_PROP(n, hwheel_code), \
+        .wheel_code = DT_INST_PROP(n, wheel_code), \
+        .touch_code = DT_INST_PROP(n, touch_code), \
+        .threshold = DT_INST_PROP(n, threshold), \
+        .axis_ratio = DT_INST_PROP(n, axis_ratio), \
+    }; \
+    static struct f13_gesture_data f13_gesture_data_##n; \
+    DEVICE_DT_INST_DEFINE(n, NULL, NULL, &f13_gesture_data_##n, &f13_gesture_config_##n, \
+                          POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &f13_gesture_driver_api);
+
+DT_INST_FOREACH_STATUS_OKAY(F13_GESTURE_INST)
+コピペ用：f13_gesture_gate.c 全文（ビルドエラー修正・スワイプリセット順序修正済み）
+念のため、ファイル全体をそのまま上書きできる完全版も記載します。
+
+C
 #define DT_DRV_COMPAT zmk_behavior_f13_hold
 
 #include <zephyr/device.h>
@@ -15,7 +32,6 @@
 #define IS_CENTRAL (!IS_ENABLED(CONFIG_ZMK_SPLIT) || IS_ENABLED(CONFIG_ZMK_SPLIT_ROLE_CENTRAL))
 
 static bool f13_is_pressed = false;
-/* F13押下中にスワイプが1回発火したかを管理（F13を離すとリセット） */
 static bool f13_swipe_triggered = false;
 
 static void set_layer_exclusive(uint8_t target) {
@@ -48,7 +64,7 @@ static int f13_hold_pressed(struct zmk_behavior_binding *binding,
                             struct zmk_behavior_binding_event event) {
 #if IS_CENTRAL
     f13_is_pressed = true;
-    f13_swipe_triggered = false; /* 押下ごとにスワイプ判定をリセット */
+    f13_swipe_triggered = false;
     zmk_hid_keyboard_press(HID_USAGE_KEY_KEYBOARD_F13);
     zmk_endpoints_send_report(HID_USAGE_KEY);
 #endif
@@ -106,7 +122,7 @@ DT_INST_FOREACH_STATUS_OKAY(LAYER_UP_INST)
 #define DT_DRV_COMPAT zmk_input_processor_f13_gate
 
 struct f13_gate_config {
-    uint8_t mode; /* 0: F13非押下時のみ通過, 1: F13押下時のみ通過 */
+    uint8_t mode;
 };
 
 static int f13_gate_handle_event(const struct device *dev, struct input_event *event,
@@ -160,18 +176,15 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
     const struct f13_gesture_config *cfg = dev->config;
     struct f13_gesture_data *data = dev->data;
 
-    /* F13を押した直後（まだスワイプ発火していない状態）なら累積値を初期化 */
     if (!f13_swipe_triggered && (k_uptime_get() - data->last_event_ms > 250)) {
         data->acc_x = 0;
         data->acc_y = 0;
     }
     data->last_event_ms = k_uptime_get();
 
-    /* タップ判定（押下時に1回だけ実行） */
     if (event->type == INPUT_EV_KEY) {
         if (event->code == cfg->touch_code) {
             if (!event->value) {
-                /* 指を離したときにも次のスワイプを許可 */
                 f13_swipe_triggered = false;
                 data->acc_x = 0;
                 data->acc_y = 0;
@@ -189,7 +202,6 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
         return ZMK_INPUT_PROC_STOP;
     }
 
-    /* 4方向スワイプ判定（F13押下中、または指を離すまで1回だけ判定） */
     if (event->type == INPUT_EV_REL && !f13_swipe_triggered) {
         if (event->code == cfg->hwheel_code) {
             data->acc_x += event->value;
@@ -204,26 +216,22 @@ static int f13_gesture_handle_event(const struct device *dev, struct input_event
 
         if (abs_x >= cfg->threshold && abs_x >= abs_y * cfg->axis_ratio) {
             f13_swipe_triggered = true;
-            data->acc_x = 0;
-            data->acc_y = 0;
             if (data->acc_x < 0) {
-                /* 物理右スワイプ（負のDIAL） -> レイヤー4 */
                 set_layer_exclusive(4);
             } else {
-                /* 物理左スワイプ（正のDIAL） -> レイヤー6 */
                 set_layer_exclusive(6);
             }
-        } else if (abs_y >= cfg->threshold && abs_y >= abs_x * cfg->axis_ratio) {
-            f13_swipe_triggered = true;
             data->acc_x = 0;
             data->acc_y = 0;
+        } else if (abs_y >= cfg->threshold && abs_y >= abs_x * cfg->axis_ratio) {
+            f13_swipe_triggered = true;
             if (data->acc_y > 0) {
-                /* 上スワイプ -> レイヤー3 */
                 set_layer_exclusive(3);
             } else {
-                /* 下スワイプ -> レイヤー5 */
                 set_layer_exclusive(5);
             }
+            data->acc_x = 0;
+            data->acc_y = 0;
         }
     }
 #endif
@@ -243,7 +251,7 @@ static const struct zmk_input_processor_driver_api f13_gesture_driver_api = {
         .axis_ratio = DT_INST_PROP(n, axis_ratio), \
     }; \
     static struct f13_gesture_data f13_gesture_data_##n; \
-    DEVICE_DT_INST_DEFINE(n, NULL, NULL, NULL, &f13_gesture_data_##n, &f13_gesture_config_##n, \
+    DEVICE_DT_INST_DEFINE(n, NULL, NULL, &f13_gesture_data_##n, &f13_gesture_config_##n, \
                           POST_KERNEL, CONFIG_KERNEL_INIT_PRIORITY_DEFAULT, &f13_gesture_driver_api);
 
 DT_INST_FOREACH_STATUS_OKAY(F13_GESTURE_INST)
